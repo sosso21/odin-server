@@ -52,7 +52,8 @@ $result =  $request->fetchAll(PDO::FETCH_ASSOC );
         $publicSchool= addslashes($_POST["publicSchool"]);
         $languages = addslashes($_POST["languages"]);
         
-        $requestText =  "SELECT univ.* , GROUP_CONCAT( curriculum.name ) as curriculum ,GROUP_CONCAT( languages.name  ) as languages  FROM univ   JOIN curriculum ON univ._id=curriculum.for_univ  JOIN languages ON univ._id=languages.for_univ WHERE univ.contry ='".$contry."' AND curriculum.name  LIKE '%".$filer."%' AND univ.level = '".$level."' AND univ.tcl = '".$tcl."' AND univ.publicSchool = '".$publicSchool."' OR languages.name   LIKE '%".$languages."%' GROUP BY univ._id";
+        $requestText =  "SELECT univ.* , GROUP_CONCAT( curriculum.name ) as curriculum ,GROUP_CONCAT( languages.name  ) as languages  FROM univ   JOIN curriculum ON univ._id=curriculum.for_univ  JOIN languages ON univ._id=languages.for_univ WHERE univ.contry ='".$contry."' AND curriculum.name  LIKE '%".$filer."%' AND univ.level <= '".$level."' AND univ.tcl = '".$tcl."' AND univ.publicSchool = '".$publicSchool."' OR languages.name   LIKE '%".$languages."%' GROUP BY univ._id";
+        
         
         $request = $pdo->query($requestText);
         $result =  $request->fetchAll(PDO::FETCH_ASSOC );
