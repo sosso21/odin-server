@@ -35,7 +35,8 @@ tcl
 place
 publicSchool
 */
-
+--- use id14287163_odin_pred ; 
+ 
 CREATE TABLE IF NOT EXISTS univ
 (
 	`_id` INT NOT NULL AUTO_INCREMENT, 
@@ -94,7 +95,8 @@ CREATE TABLE IF NOT EXISTS user
 	`fname` VARCHAR(255) NOT NULL, 
 	`lname` VARCHAR(255) NOT NULL, 
 	`email` VARCHAR(25) NOT NULL, 
-	`is_admin` BOOLEAN DEFAULT false,
+	`isAdmin` BOOLEAN DEFAULT false,
+	`isActif` BOOLEAN DEFAULT true,
 	`sub_date` INT  NOT NULL DEFAULT UNIX_TIMESTAMP() , 
 	`password` VARCHAR(255) NOT NULL,
 	UNIQUE ( `email`) ,

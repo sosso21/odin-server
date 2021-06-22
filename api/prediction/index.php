@@ -27,10 +27,10 @@ $result =  $request->fetchAll(PDO::FETCH_ASSOC );
  
  if (strpos($url, 'api/prediction/filter/') !==false) {
      
-	$filer =str_replace("api/prediction/filter/", "", $url);
-	$filer =addslashes(str_replace("%", " ", $filer));
+	$filter =str_replace("api/prediction/filter/", "", $url);
+	$filter =addslashes(str_replace("%", " ", $filter));
    
-    $requestText =  "SELECT univ.* , GROUP_CONCAT( curriculum.name ) as curriculum ,GROUP_CONCAT( languages.name  ) as languages  FROM univ   JOIN curriculum ON univ._id=curriculum.for_univ  JOIN languages ON univ._id=languages.for_univ WHERE univ.name LIKE '%".$filer."%' OR curriculum.name LIKE '%". $filer."%' OR  languages.name  LIKE '%".$filer."%' GROUP BY univ._id";
+    $requestText =  "SELECT univ.* , GROUP_CONCAT( curriculum.name ) as curriculum ,GROUP_CONCAT( languages.name  ) as languages  FROM univ   JOIN curriculum ON univ._id=curriculum.for_univ  JOIN languages ON univ._id=languages.for_univ WHERE univ.name LIKE '%".$filter."%' OR curriculum.name LIKE '%". $filter."%' OR  languages.name  LIKE '%".$filter."%' GROUP BY univ._id";
     
     $request = $pdo->query($requestText);
     $result =  $request->fetchAll(PDO::FETCH_ASSOC );
@@ -83,10 +83,10 @@ $result =  $request->fetchAll(PDO::FETCH_ASSOC );
 `publicSchool`= '".$publicSchool."'
             WHERE _id = ".$_id ;
 
-$textReqCuriculumDel = " DELETE FROM  `curriculum`
+$textReqCuriculumDel = " DELETE IF EXISTS FROM  `curriculum`
 WHERE for_univ = ".$_id ;
 
-$textReqLanguagesDel = " DELETE FROM  `languages`
+$textReqLanguagesDel = " DELETE IF EXISTS FROM  `languages`
 WHERE for_univ = ".$_id ;
 
 $textReqCuriculumIns = " INSERT INTO `curriculum` (`name`,`for_univ`)
@@ -94,7 +94,7 @@ VVALUES " ;
 foreach ($curriculum as $key => $value) {
      $textReqCuriculumIns .="('".$value."', '".$_id."' )";
      if ($key+1 != count($curriculum)) {
-       $textReqCuriculumIns.= ","
+       $textReqCuriculumIns.= ",";
      }
 }
 
@@ -103,7 +103,7 @@ VALUES " ;
 foreach ($languages as $key => $value) {
      $textReLanguagesIns .="('".$value."', '".$_id."' )";
      if ($key+1 != count($languages)) {
-       $textReLanguagesIns.= ","
+       $textReLanguagesIns.= ",";
      }
 }
 
@@ -156,7 +156,7 @@ VALUES " ;
 foreach ($curriculum as $key => $value) {
      $textReqCuriculumIns .="('".$value."', '".$_id."' )";
      if ($key+1 != count($curriculum)) {
-       $textReqCuriculumIns.= ","
+       $textReqCuriculumIns.= ",";
      }
 }
 
@@ -165,7 +165,7 @@ VALUES " ;
 foreach ($languages as $key => $value) {
      $textReLanguagesIns .="('".$value."', '".$_id."' )";
      if ($key+1 != count($languages)) {
-       $textReLanguagesIns.= ","
+       $textReLanguagesIns.= ",";
      }
 }
 
@@ -184,13 +184,13 @@ $result =  $request->fetchAll(PDO::FETCH_ASSOC );
          if (strpos($url, 'api/prediction/admin/del') !==false && !empty($_POST["_id"]) ) {
             $_id = addslashes($_POST["_id"] ); 
             
-            $textReqUnivDel = " DELETE FROM  `univ`
+            $textReqUnivDel = " DELETE IF EXISTS FROM  `univ`
             WHERE _id = ".$_id ;
             
-            $textReqCuriculumDel = " DELETE FROM  `curriculum`
+            $textReqCuriculumDel = " DELETE IF EXISTS FROM  `curriculum`
             WHERE for_univ = ".$_id ;
 
-$textReqLanguagesDel = " DELETE FROM  `languages`
+$textReqLanguagesDel = " DELETE IF EXISTS FROM  `languages`
 WHERE for_univ = ".$_id ;
 
 $requestText =  "SELECT univ.* , GROUP_CONCAT( curriculum.name ) as curriculum ,GROUP_CONCAT( languages.name  ) as languages  FROM univ   JOIN curriculum ON univ._id=curriculum.for_univ  JOIN languages ON univ._id=languages.for_univ   GROUP BY univ._id";
